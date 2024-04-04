@@ -1,0 +1,90 @@
+.cards__item {
+  margin: 0;
+  padding: 7px;
+  background-color: transparent;
+  border: 0.5px solid #ffffff50;
+  border-radius: 5px;
+}
+.cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cards__card {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+}
+.main__h3 {
+  color: #ffffff;
+  font-size: 14px;
+}
+.card__images {
+  display: block;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.card__image {
+  width: 30px;
+  height: 30px;
+  display: block;
+  background-size: cover;
+  border-radius: 50px;
+}
+.card__content {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.cards__button {
+  cursor: pointer;
+  width: auto;
+  width: 25px;
+  height: 25px;
+  background-color: transparent;
+  border: 0.5px solid #ffffff50;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #ffffff70;
+  transition: all 0.3s;
+}
+.cards__button:hover {
+  background-color: #bed6fb;
+  border: 1px solid #bed6fb;
+  color: #0d1117;
+}
+/* Аккардион */
+.user__details {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 5px;
+}
+.user__details_block {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+}
+.user__details_block span {
+  font-size: 12px;
+  color: #ffffff50;
+}
+.position {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+}
