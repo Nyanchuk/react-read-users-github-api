@@ -11,6 +11,7 @@ export const Main = () => {
   const [hasMoreResults, setHasMoreResults] = useState(true);
   const [hasPrevPage, setHasPrevPage] = useState(false);
   const itemsPerPage = 15;
+  const token = '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';
 
   const handleSearch = async () => {
     if (searchTerm.trim() === "") {
@@ -19,8 +20,14 @@ export const Main = () => {
 
     try {
       const response = await fetch(
-        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}`
+        `https://api.github.com/search/users?q=${searchTerm}&per_page=15&page=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
       const data = await response.json();
       setUsers(data.items);
 
