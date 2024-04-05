@@ -19,6 +19,7 @@ function Profile({ user }) {
 
     const response = await fetch(`https://api.github.com/users/${user.login}`);
     const data = await response.json();
+    console.log(data)
     setUserDetails(data);
     setIsOpen(true);
   };

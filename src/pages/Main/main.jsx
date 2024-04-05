@@ -20,7 +20,7 @@ export const Main = () => {
   const fetchRepos = async (users) => {
     const repoPromises = users.map(async (user) => {
       const response = await fetch(
-        `https://api.github.com/users/${user.login}/repos`,
+        `https://api.github.com/users/${user.login}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,7 +29,7 @@ export const Main = () => {
       );
       const data = await response.json();
       setShowFilters(!showFilters);
-      return { ...user, repoCount: data.length };
+      return { ...user, Repos: data.public_repos };
     });
 
     const filteredUsers = await Promise.all(repoPromises);
@@ -53,6 +53,7 @@ export const Main = () => {
       );
 
       const data = await response.json();
+      console.log(data)
       setUsers(data.items);
 
       if (data.items.length < itemsPerPage) {
@@ -132,20 +133,22 @@ export const Main = () => {
           </button>
         </div>
       </div>
-      <div className={styles.filters}>
-        <div
-          className={styles.filters__block}
-          onClick={() => toggleFilters(users)}
-        >
-          Фильтр репозиториев
-        </div>
-        {showFilters && (
-          <div className={styles.filters__content}>
-            <div className={styles.filter}>По возрастанию</div>
-            <div className={styles.filter}>По убыванию</div>
+        {users.length > 0 && (
+          <div className={styles.filters}>
+            <div
+              className={styles.filters__block}
+              onClick={() => toggleFilters(users)}
+            >
+              Фильтр репозиториев
+            </div>
+            {showFilters && (
+              <div className={styles.filters__content}>
+                <div className={styles.filter}>По возрастанию</div>
+                <div className={styles.filter}>По убыванию</div>
+              </div>
+            )}
           </div>
         )}
-      </div>
       <div className={styles.profiles}>
         {users.map((user) => (
           <Profile key={user.id} user={user} editLink={`/product/${user.id}`} />
