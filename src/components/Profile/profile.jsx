@@ -40,7 +40,7 @@ function Profile({ user }) {
              
             </div>
           </div>
-          <Link to={user.html_url} className={styles.main__url}>{user.html_url}</Link>
+          <Link to={user.html_url} className={styles.main__url}>GitHub</Link>
           <button className={styles.cards__button} onClick={clickUserInfo}>
             {isOpen ? "-" : "+"}
           </button>

@@ -17,6 +17,22 @@ export const Main = () => {
     const filteredUsers = await fetchRepos(users);
     setUsers(filteredUsers);
   };
+  //   Фильтрация по возрастанию репо
+  const sortUsersByRepos = (users) => {
+    return users.sort((a, b) => a.Repos - b.Repos);
+  };
+  const handleSortAscending = () => {
+    const sortedUsers = sortUsersByRepos(users);
+    setUsers([...sortedUsers]);
+  };
+  //   Фильтрация по убыванию репо
+  const sortUsersByReposDescending = (users) => {
+    return users.sort((a, b) => b.Repos - a.Repos);
+  };
+  const handleSortDescending = () => {
+    const sortedUsers = sortUsersByReposDescending(users);
+    setUsers([...sortedUsers]);
+  };
   const fetchRepos = async (users) => {
     const repoPromises = users.map(async (user) => {
       const response = await fetch(
@@ -53,7 +69,7 @@ export const Main = () => {
       );
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setUsers(data.items);
 
       if (data.items.length < itemsPerPage) {
@@ -133,22 +149,24 @@ export const Main = () => {
           </button>
         </div>
       </div>
-        {users.length > 0 && (
-          <div className={styles.filters}>
-            <div
-              className={styles.filters__block}
-              onClick={() => toggleFilters(users)}
-            >
-              Фильтр репозиториев
-            </div>
-            {showFilters && (
-              <div className={styles.filters__content}>
-                <div className={styles.filter}>По возрастанию</div>
-                <div className={styles.filter}>По убыванию</div>
-              </div>
-            )}
+      {users.length > 0 && (
+        <div className={styles.filters}>
+          <div
+            className={styles.filters__block}
+            onClick={() => toggleFilters(users)}
+          >
+            Фильтр репозиториев
           </div>
-        )}
+          {showFilters && (
+            <div className={styles.filters__content}>
+              <div className={styles.filter} onClick={handleSortAscending}>
+                По возрастанию
+              </div>
+              <div className={styles.filter} onClick={handleSortDescending}>По убыванию</div>
+            </div>
+          )}
+        </div>
+      )}
       <div className={styles.profiles}>
         {users.map((user) => (
           <Profile key={user.id} user={user} editLink={`/product/${user.id}`} />
