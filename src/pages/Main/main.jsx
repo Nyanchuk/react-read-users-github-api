@@ -8,40 +8,78 @@ export const Main = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-const itemsPerPage = 15;
+  const [hasMoreResults, setHasMoreResults] = useState(true);
+  const [hasPrevPage, setHasPrevPage] = useState(false);
+  const itemsPerPage = 15;
 
-const handleSearch = async () => {
+  const handleSearch = async () => {
     if (searchTerm.trim() === "") {
       return;
     }
-  
+
     try {
       const response = await fetch(
         `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}`
       );
       const data = await response.json();
       setUsers(data.items);
+
+      if (data.items.length < itemsPerPage) {
+        setHasMoreResults(false);
+      } else {
+        setHasMoreResults(true);
+      }
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
   };
 
   const nextPage = async () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  
     try {
       const response = await fetch(
-        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage + 1}`
+        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${
+          currentPage + 1
+        }`
+      );
+      const data = await response.json();
+
+      if (data.items.length > 0) {
+        setCurrentPage((prevPage) => prevPage + 1);
+        setUsers(data.items);
+        setHasPrevPage(true);
+        if (data.items.length < itemsPerPage) {
+          setHasMoreResults(false);
+        }
+      } else {
+        console.log("Больше результатов нет");
+        setHasMoreResults(false);
+      }
+    } catch (error) {
+      console.error("Ошибка при получении данных: ", error);
+    }
+  };
+
+  const prevPage = async () => {
+    if (currentPage === 1) {
+      return;
+    }
+
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    setHasMoreResults(true);
+    setHasPrevPage(currentPage > 2);
+
+    try {
+      const response = await fetch(
+        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${
+          currentPage - 1
+        }`
       );
       const data = await response.json();
       setUsers(data.items);
+      setHasPrevPage(currentPage > 2);
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  };
-  
-  const prevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
   return (
@@ -58,7 +96,9 @@ const handleSearch = async () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           ></input>
-          <button className={styles.header__button} onClick={handleSearch}>Поиск</button>
+          <button className={styles.header__button} onClick={handleSearch}>
+            Поиск
+          </button>
         </div>
       </div>
       <div className={styles.filters}>
@@ -69,11 +109,27 @@ const handleSearch = async () => {
           <Profile key={user.id} user={user} editLink={`/product/${user.id}`} />
         ))}
       </div>
-      <div>
-    <button onClick={prevPage}>Previous</button>
-    <span>{currentPage}</span>
-    <button onClick={nextPage}>Next</button>
-  </div>
+      {users.length > 0 && (
+        <div className={styles.pagination}>
+          <button
+            className={`${styles.button} ${
+              !hasPrevPage ? styles.disabled : ""
+            }`}
+            onClick={prevPage}
+          >
+            Prev
+          </button>
+          <span>{currentPage}</span>
+          <button
+            className={`${styles.button} ${
+              !hasMoreResults ? styles.disabled : ""
+            }`}
+            onClick={nextPage}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

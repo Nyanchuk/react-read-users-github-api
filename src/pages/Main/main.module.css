@@ -67,3 +67,39 @@
   flex-direction: column;
   gap: 15px;
 }
+.button {
+  padding: 5px;
+  background-color: transparent;
+  color: #ffffff70;
+  border: 0.5px solid #ffffff70;
+  border-radius: 5px;
+  transition: all .3s;
+}
+.button:hover {
+  background-color: #ffffff70;
+  color: #ffffff;
+  border: 0.5px solid #ffffff10;
+}
+.button:active {
+  transform: scale(.99);
+
+}
+.button.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.pagination {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.pagination span {
+  text-align: center;
+  width: 20px;
+  color: #ffffff70;
+}
