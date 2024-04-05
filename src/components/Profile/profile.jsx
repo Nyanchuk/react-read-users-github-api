@@ -4,6 +4,7 @@ import repo from "../../img/repository.png";
 import users from "../../img/users.png";
 import refresh from "../../img/refresh.png";
 import wand from "../../img/magic-wand.png";
+import { Link } from "react-router-dom";
 
 function Profile({ user }) {
   const [userDetails, setUserDetails] = useState(null);
@@ -35,8 +36,10 @@ function Profile({ user }) {
             </div>
             <div className={styles.card__content}>
               <div className={styles.main__h3}>{user.login}</div>
+             
             </div>
           </div>
+          <Link to={user.html_url} className={styles.main__url}>{user.html_url}</Link>
           <button className={styles.cards__button} onClick={clickUserInfo}>
             {isOpen ? "-" : "+"}
           </button>
