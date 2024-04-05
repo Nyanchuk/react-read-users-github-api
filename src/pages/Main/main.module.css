@@ -51,15 +51,41 @@
   padding: 15px;
   display: flex;
   align-items: center;
+  gap: 10px;
   background-color: #06080a;
 }
+.filters__content {
+  display: flex;
+  gap: 10px;
+}
 .filters__block {
+  cursor: pointer;
   padding: 5px;
   background-color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 5px;
   font-size: 14px;
   color: #0d1117;
+  transition: all .3s;
+}
+.filters__block:hover {
+  background-color: #cbcbcb;
+  border: 1px solid #cbcbcb;
+}
+.filter {
+  padding: 5px;
+  cursor: pointer;
+  text-align: center;
+  background-color: transparent;
+  border: 0.5px solid #ffffff50;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #ffffff50;
+  transition: all .3s;
+}
+.filter:hover {
+  border: 0.5px solid #ffffff;
+  color: #ffffff;
 }
 .profiles {
   padding: 10px;
@@ -73,7 +99,7 @@
   color: #ffffff70;
   border: 0.5px solid #ffffff70;
   border-radius: 5px;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 .button:hover {
   background-color: #ffffff70;
@@ -81,8 +107,7 @@
   border: 0.5px solid #ffffff10;
 }
 .button:active {
-  transform: scale(.99);
-
+  transform: scale(0.99);
 }
 .button.disabled {
   opacity: 0.3;

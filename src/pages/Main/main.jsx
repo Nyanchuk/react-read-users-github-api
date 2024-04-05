@@ -1,5 +1,4 @@
 import styles from "./main.module.css";
-import { Link } from "react-router-dom";
 import logo from "../../img/githubW.png";
 import { useState } from "react";
 import Profile from "../../components/Profile/profile";
@@ -11,7 +10,32 @@ export const Main = () => {
   const [hasMoreResults, setHasMoreResults] = useState(true);
   const [hasPrevPage, setHasPrevPage] = useState(false);
   const itemsPerPage = 15;
-  const token = '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';
+  const token = "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";
+  const [showFilters, setShowFilters] = useState(false);
+
+  const toggleFilters = async (users) => {
+    const filteredUsers = await fetchRepos(users);
+    setUsers(filteredUsers);
+  };
+  const fetchRepos = async (users) => {
+    const repoPromises = users.map(async (user) => {
+      const response = await fetch(
+        `https://api.github.com/users/${user.login}/repos`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setShowFilters(!showFilters);
+      return { ...user, repoCount: data.length };
+    });
+
+    const filteredUsers = await Promise.all(repoPromises);
+    console.log(filteredUsers);
+    return filteredUsers;
+  };
 
   const handleSearch = async () => {
     if (searchTerm.trim() === "") {
@@ -109,7 +133,18 @@ export const Main = () => {
         </div>
       </div>
       <div className={styles.filters}>
-        <div className={styles.filters__block}>Фильтр</div>
+        <div
+          className={styles.filters__block}
+          onClick={() => toggleFilters(users)}
+        >
+          Фильтр репозиториев
+        </div>
+        {showFilters && (
+          <div className={styles.filters__content}>
+            <div className={styles.filter}>По возрастанию</div>
+            <div className={styles.filter}>По убыванию</div>
+          </div>
+        )}
       </div>
       <div className={styles.profiles}>
         {users.map((user) => (
