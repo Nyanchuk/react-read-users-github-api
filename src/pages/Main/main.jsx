@@ -89,18 +89,20 @@ export const Main = () => {
   };
   const nextPage = async () => {
     try {
-      const response = await fetch(
-        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${
-          currentPage + 1
-        }`
-      );
-      const data = await response.json();
-
-      if (data.items.length > 0) {
-        setCurrentPage((prevPage) => prevPage + 1);
-        setUsers(data.items);
+      let users;
+      if (maxRepositories) {
+        users = await fetchUsersSortedAscending(searchTerm, currentPage + 1, itemsPerPage, token);
+      } else if (minRepositories) {
+        users = await fetchUsersSortedDescending(searchTerm, currentPage + 1, itemsPerPage, token);
+      } else {
+        users = await fetchUsers(searchTerm, currentPage + 1, itemsPerPage, token);
+      }
+  
+      if (users.length > 0) {
+        setCurrentPage(prevPage => prevPage + 1);
+        setUsers(users);
         setHasPrevPage(true);
-        if (data.items.length < itemsPerPage) {
+        if (users.length < itemsPerPage) {
           setHasMoreResults(false);
         }
       } else {
@@ -115,19 +117,22 @@ export const Main = () => {
     if (currentPage === 1) {
       return;
     }
-
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
     setHasMoreResults(true);
     setHasPrevPage(currentPage > 2);
-
+  
     try {
-      const response = await fetch(
-        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${
-          currentPage - 1
-        }`
-      );
-      const data = await response.json();
-      setUsers(data.items);
+      let users;
+      if (maxRepositories) {
+        users = await fetchUsersSortedAscending(searchTerm, currentPage - 1, itemsPerPage, token);
+      } else if (minRepositories) {
+        users = await fetchUsersSortedDescending(searchTerm, currentPage - 1, itemsPerPage, token);
+      } else {
+        users = await fetchUsers(searchTerm, currentPage - 1, itemsPerPage, token);
+      }
+  
+      setUsers(users);
       setHasPrevPage(currentPage > 2);
     } catch (error) {
       console.error("Error fetching data: ", error);
