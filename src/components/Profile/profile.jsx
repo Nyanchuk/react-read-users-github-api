@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 function Profile({ user }) {
   const [userDetails, setUserDetails] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const token = "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";
 
   const clickUserInfo = async () => {
     if (isOpen) {
@@ -16,8 +17,15 @@ function Profile({ user }) {
       setIsOpen(false);
       return;
     }
+    const response = await fetch(
+      `https://api.github.com/users/${user.login}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    const response = await fetch(`https://api.github.com/users/${user.login}`);
     const data = await response.json();
     console.log(data)
     setUserDetails(data);

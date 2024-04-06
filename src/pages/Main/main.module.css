@@ -54,6 +54,7 @@
   gap: 10px;
   background-color: #06080a;
 }
+
 .filters__content {
   display: flex;
   gap: 10px;
@@ -82,6 +83,17 @@
   font-size: 14px;
   color: #ffffff50;
   transition: all .3s;
+}
+.activeButton {
+  padding: 5px;
+  cursor: pointer;
+  text-align: center;
+  background-color: transparent;;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: all .3s;
+  border: 0.5px solid #ffffff;
+  color: #ffffff;
 }
 .filter:hover {
   border: 0.5px solid #ffffff;

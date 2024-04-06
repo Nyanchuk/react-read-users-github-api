@@ -2,65 +2,67 @@ import styles from "./main.module.css";
 import logo from "../../img/githubW.png";
 import { useState } from "react";
 import Profile from "../../components/Profile/profile";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setMaxRepositories,
+  setMinRepositories,
+} from "../../store/action/creators";
 
 export const Main = () => {
+  const dispatch = useDispatch();
+  const maxRepositories = useSelector(
+    (state) => state.product.max_repositories
+  );
+  const minRepositories = useSelector(
+    (state) => state.product.min_repositories
+  );
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreResults, setHasMoreResults] = useState(true);
   const [hasPrevPage, setHasPrevPage] = useState(false);
-  const itemsPerPage = 15;
+  const itemsPerPage = 20;
   const token = "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";
-  const [showFilters, setShowFilters] = useState(false);
 
-  const toggleFilters = async (users) => {
-    const filteredUsers = await fetchRepos(users);
-    setUsers(filteredUsers);
+  // Обработчик клика для отключения сортировки
+  const handleSortOff = async () => {
+    await setUsers([]);
+    await dispatch(setMaxRepositories(false));
+    await dispatch(setMinRepositories(false));
+    await handleSearch();
   };
-  //   Фильтрация по возрастанию репо
-  const sortUsersByRepos = (users) => {
-    return users.sort((a, b) => a.Repos - b.Repos);
-  };
-  const handleSortAscending = () => {
-    const sortedUsers = sortUsersByRepos(users);
-    setUsers([...sortedUsers]);
-  };
-  //   Фильтрация по убыванию репо
-  const sortUsersByReposDescending = (users) => {
-    return users.sort((a, b) => b.Repos - a.Repos);
-  };
-  const handleSortDescending = () => {
-    const sortedUsers = sortUsersByReposDescending(users);
-    setUsers([...sortedUsers]);
-  };
-  const fetchRepos = async (users) => {
-    const repoPromises = users.map(async (user) => {
-      const response = await fetch(
-        `https://api.github.com/users/${user.login}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      setShowFilters(!showFilters);
-      return { ...user, Repos: data.public_repos };
-    });
-
-    const filteredUsers = await Promise.all(repoPromises);
-    console.log(filteredUsers);
-    return filteredUsers;
+  // Обработчик клика для сортировки по возрастанию репозиториев
+  const handleSortAscending = async () => {
+    await setUsers([]);
+    await dispatch(setMaxRepositories(true));
+    await dispatch(setMinRepositories(false));
+    await handleSearch();
   };
 
+  // Обработчик клика для сортировки по убыванию репозиториев
+  const handleSortDescending = async () => {
+    await setUsers([]);
+    await dispatch(setMaxRepositories(false));
+    await dispatch(setMinRepositories(true));
+    await handleSearch();
+  };
   const handleSearch = async () => {
     if (searchTerm.trim() === "") {
       return;
     }
 
     try {
+      let sort = "";
+      if (maxRepositories) {
+        sort = "&sort=repositories&order=asc";
+        console.log("сортировка по возрастанию");
+      } else if (minRepositories) {
+        sort = "&sort=repositories&order=desc";
+        console.log("сортировка по убыванию");
+      }
+
       const response = await fetch(
-        `https://api.github.com/search/users?q=${searchTerm}&per_page=15&page=${currentPage}`,
+        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}${sort}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,7 +83,6 @@ export const Main = () => {
       console.error("Error fetching data: ", error);
     }
   };
-
   const nextPage = async () => {
     try {
       const response = await fetch(
@@ -106,7 +107,6 @@ export const Main = () => {
       console.error("Ошибка при получении данных: ", error);
     }
   };
-
   const prevPage = async () => {
     if (currentPage === 1) {
       return;
@@ -151,20 +151,31 @@ export const Main = () => {
       </div>
       {users.length > 0 && (
         <div className={styles.filters}>
-          <div
-            className={styles.filters__block}
-            onClick={() => toggleFilters(users)}
-          >
-            Фильтр репозиториев
+          <div className={styles.filters__block}>Сортировка по:</div>
+          <div className={styles.filters__content}>
+            <button
+              className={maxRepositories ? styles.activeButton : styles.filter}
+              onClick={handleSortAscending}
+            >
+              По возрастанию
+            </button>
+            <button
+              className={minRepositories ? styles.activeButton : styles.filter}
+              onClick={handleSortDescending}
+            >
+              По убыванию
+            </button>
+            <button
+              className={
+                !maxRepositories && !minRepositories
+                  ? styles.activeButton
+                  : styles.filter
+              }
+              onClick={handleSortOff}
+            >
+              Без сортировки
+            </button>
           </div>
-          {showFilters && (
-            <div className={styles.filters__content}>
-              <div className={styles.filter} onClick={handleSortAscending}>
-                По возрастанию
-              </div>
-              <div className={styles.filter} onClick={handleSortDescending}>По убыванию</div>
-            </div>
-          )}
         </div>
       )}
       <div className={styles.profiles}>
