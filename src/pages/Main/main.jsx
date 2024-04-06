@@ -7,6 +7,11 @@ import {
   setMaxRepositories,
   setMinRepositories,
 } from "../../store/action/creators";
+import {
+  fetchUsers,
+  fetchUsersSortedAscending,
+  fetchUsersSortedDescending,
+} from "../../api";
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -36,45 +41,44 @@ export const Main = () => {
     await setUsers([]);
     await dispatch(setMaxRepositories(true));
     await dispatch(setMinRepositories(false));
-    await handleSearch();
+    let users = await fetchUsersSortedAscending(
+      searchTerm,
+      currentPage,
+      itemsPerPage,
+      token
+    );
+    setUsers(users);
   };
-
   // Обработчик клика для сортировки по убыванию репозиториев
   const handleSortDescending = async () => {
     await setUsers([]);
     await dispatch(setMaxRepositories(false));
     await dispatch(setMinRepositories(true));
-    await handleSearch();
+    let users = await fetchUsersSortedDescending(
+      searchTerm,
+      currentPage,
+      itemsPerPage,
+      token
+    );
+    setUsers(users);
   };
+  // Обычный поиск
   const handleSearch = async () => {
     if (searchTerm.trim() === "") {
       return;
     }
-
     try {
-      let sort = "";
-      if (maxRepositories) {
-        sort = "&sort=repositories&order=asc";
-        console.log("сортировка по возрастанию");
-      } else if (minRepositories) {
-        sort = "&sort=repositories&order=desc";
-        console.log("сортировка по убыванию");
-      }
-
-      const response = await fetch(
-        `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}${sort}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      let users = await fetchUsers(
+        searchTerm,
+        currentPage,
+        itemsPerPage,
+        token
       );
 
-      const data = await response.json();
-      console.log(data);
-      setUsers(data.items);
+      console.log(users);
+      setUsers(users);
 
-      if (data.items.length < itemsPerPage) {
+      if (users.length < itemsPerPage) {
         setHasMoreResults(false);
       } else {
         setHasMoreResults(true);
@@ -157,13 +161,13 @@ export const Main = () => {
               className={maxRepositories ? styles.activeButton : styles.filter}
               onClick={handleSortAscending}
             >
-              По возрастанию
+              По возрастанию репозиториев
             </button>
             <button
               className={minRepositories ? styles.activeButton : styles.filter}
               onClick={handleSortDescending}
             >
-              По убыванию
+              По убыванию репозиториев
             </button>
             <button
               className={
