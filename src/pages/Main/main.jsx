@@ -160,19 +160,19 @@ export const Main = () => {
       </div>
       {users.length > 0 && (
         <div className={styles.filters}>
-          <div className={styles.filters__block}>Сортировка по:</div>
+          <div className={styles.filters__block}>Сортировка по количеству репозиториев:</div>
           <div className={styles.filters__content}>
             <button
               className={maxRepositories ? styles.activeButton : styles.filter}
               onClick={handleSortAscending}
             >
-              По возрастанию репозиториев
+              По возрастанию
             </button>
             <button
               className={minRepositories ? styles.activeButton : styles.filter}
               onClick={handleSortDescending}
             >
-              По убыванию репозиториев
+              По убыванию
             </button>
             <button
               className={
