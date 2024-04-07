@@ -290,7 +290,6 @@ export const Main = () => {
           </button>
         </div>
       </div>
-      {/* {users.length > 0 && ( */}
         <div className={styles.filters}>
           <div className={styles.filters__block}>
             Сортировка по количеству репозиториев:
@@ -320,10 +319,9 @@ export const Main = () => {
             </button>
           </div>
         </div>
-      {/* )} */}
       <div className={styles.profiles}>
-      {!isSearchStarted && users.length === 0 && (
-        <div className={styles.users__none}>Введите логин пользователя</div>
+      {!isSearchStarted && users.length === 0 &&(
+        <div className={styles.users__none}>Введите корректный логин пользователя GitHub</div>
       )}
       {isSearchStarted && isLoading ? (
         <MySkeleton />

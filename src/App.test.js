@@ -1,13 +1,12 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import App , {handleSearch} from "./App";
+import App from "./App";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/lib/integration/react";
 import { persistor, store } from "./store/store";
 import styles from "./main.module.css";
 
-// Средние тесты на функционал DOM-элементов
+// Тесты на функционал DOM-элементов
 test('handleSearch function is called when "Поиск" button is clicked', () => {
   render(
     <Provider store={store}>
@@ -37,7 +36,6 @@ test('handleSortOff function is called when "Без сортировки" button
   const sortOffButton = screen.getByText("Без сортировки");
   fireEvent.click(sortOffButton);
 
-  // Здесь вы можете добавить проверку, что функция handleSortOff вызывается
 });
 
 test('handleSortAscending function is called when "По возрастанию" button is clicked', () => {
