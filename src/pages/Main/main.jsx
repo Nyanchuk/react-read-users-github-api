@@ -34,7 +34,7 @@ export const Main = () => {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSearchStarted, setIsSearchStarted] = useState(false);
-  const token = "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";
+  const token = "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";
 
   // Обработчик клика для отключения сортировки
   const handleSortOff = async () => {
