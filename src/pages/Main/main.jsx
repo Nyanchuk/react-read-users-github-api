@@ -34,7 +34,6 @@ export const Main = () => {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSearchStarted, setIsSearchStarted] = useState(false);
-  const token = "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";
 
   // Обработчик клика для отключения сортировки
   const handleSortOff = async () => {
@@ -78,7 +77,6 @@ export const Main = () => {
       searchTerm,
       currentPage,
       itemsPerPage,
-      token
     );
     setUsers(users);
     setIsLoading(false);
@@ -107,7 +105,6 @@ export const Main = () => {
       searchTerm,
       currentPage,
       itemsPerPage,
-      token
     );
     setUsers(users);
     setIsLoading(false);
@@ -133,7 +130,6 @@ export const Main = () => {
         searchTerm,
         currentPage,
         itemsPerPage,
-        token
       );
 
       console.log(users);
@@ -174,21 +170,18 @@ export const Main = () => {
           searchTerm,
           currentPage + 1,
           itemsPerPage,
-          token
         );
       } else if (minRepositories) {
         users = await fetchUsersSortedDescending(
           searchTerm,
           currentPage + 1,
           itemsPerPage,
-          token
         );
       } else {
         users = await fetchUsers(
           searchTerm,
           currentPage + 1,
           itemsPerPage,
-          token
         );
       }
 
@@ -239,21 +232,18 @@ export const Main = () => {
           searchTerm,
           currentPage - 1,
           itemsPerPage,
-          token
         );
       } else if (minRepositories) {
         users = await fetchUsersSortedDescending(
           searchTerm,
           currentPage - 1,
           itemsPerPage,
-          token
         );
       } else {
         users = await fetchUsers(
           searchTerm,
           currentPage - 1,
           itemsPerPage,
-          token
         );
       }
 
