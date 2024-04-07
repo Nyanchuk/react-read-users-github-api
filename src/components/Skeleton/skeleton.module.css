@@ -1,0 +1,48 @@
+.playlistItem {
+  width: 100%;
+  display: block;
+  margin-bottom: 12px;
+  padding-bottom: 5px;
+}
+
+.playlistTrack {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.trackSkeleton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.trackSkeletonRec__cur {
+  background-color: #e0e0e035;
+  border-radius: 40px;
+  height: 40px;
+  width: 40px;
+  animation: pulse 2s ease-in-out infinite;
+}
+.trackSkeletonRec {
+  background-color: #e0e0e035;
+  border-radius: 10px;
+  height: 40px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e0e035;
+  }
+  50% {
+    background-color: #e0e0e050;
+  }
+  100% {
+    background-color: #e0e0e035;
+  }
+}

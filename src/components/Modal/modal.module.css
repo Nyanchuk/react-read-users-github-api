@@ -1,0 +1,50 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+.modalContent {
+  position: relative;
+  background-color: transparent;
+  padding: 15px;
+  border-radius: 8px;
+  border: 0.5px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+  max-width: 400px; 
+  width: 100%;
+}
+.close {
+  padding: 2px;
+  padding-left: 7px;
+  padding-right: 7px;
+  background-color: #fff;
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  cursor: pointer;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.467);
+  z-index: 99;
+  transition: all 0.3s;
+}
+.close:hover {
+  background-color: #dcdcdc;
+}
+.errorText {
+  color: #fff;
+}
+/* Стили для блока, который содержит модальное окно и контент */
+.main_err_plase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
