@@ -14,6 +14,8 @@ import {
 } from "../../api";
 import { Modal } from "../../components/Modal/modal";
 import { Link } from "react-router-dom";
+import Skeleton from "../../components/Skeleton/skeleton";
+import MySkeleton from "../../components/Skeleton/skeleton";
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -31,6 +33,8 @@ export const Main = () => {
   const itemsPerPage = 20;
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSearchStarted, setIsSearchStarted] = useState(false);
   const token = "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";
 
   // Обработчик клика для отключения сортировки
@@ -66,6 +70,8 @@ export const Main = () => {
       setError("Для сортировки страницы введите логин латинскими буквами");
       return;
     }
+    setIsLoading(true);
+    setIsSearchStarted(true);
     await setUsers([]);
     await dispatch(setMaxRepositories(true));
     await dispatch(setMinRepositories(false));
@@ -76,6 +82,8 @@ export const Main = () => {
       token
     );
     setUsers(users);
+    setIsLoading(false);
+    setIsSearchStarted(false);
   };
   // Обработчик клика для сортировки по убыванию репозиториев
   const handleSortDescending = async () => {
@@ -91,6 +99,8 @@ export const Main = () => {
       setError("Для сортировки страницы введите логин латинскими буквами");
       return;
     }
+    setIsLoading(true);
+    setIsSearchStarted(true);
     await setUsers([]);
     await dispatch(setMaxRepositories(false));
     await dispatch(setMinRepositories(true));
@@ -101,6 +111,8 @@ export const Main = () => {
       token
     );
     setUsers(users);
+    setIsLoading(false);
+    setIsSearchStarted(false);
   };
   const handleSearch = async () => {
     setError("");
@@ -115,7 +127,8 @@ export const Main = () => {
       setError("Поиск поддерживается только для латинских букв");
       return;
     }
-
+    setIsLoading(true);
+    setIsSearchStarted(true);
     try {
       let users = await fetchUsers(
         searchTerm,
@@ -134,6 +147,10 @@ export const Main = () => {
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
+      setError("Ошибка загрузки данных");
+    } finally {
+      setIsLoading(false);
+      setIsSearchStarted(false);
     }
   };
   const nextPage = async () => {
@@ -149,7 +166,8 @@ export const Main = () => {
       setError("Для загрузки следующей страницы введите логин латинскими буквами");
       return;
     }
-
+    setIsLoading(true);
+    setIsSearchStarted(true);
     try {
       let users;
       if (maxRepositories) {
@@ -178,6 +196,8 @@ export const Main = () => {
       if (users.length > 0) {
         setCurrentPage((prevPage) => prevPage + 1);
         setUsers(users);
+        setIsLoading(false);
+        setIsSearchStarted(false);
         setHasPrevPage(true);
         if (users.length < itemsPerPage) {
           setHasMoreResults(false);
@@ -203,6 +223,7 @@ export const Main = () => {
       setError("Для загрузки предыдущей страницы введите логин латинскими буквами");
       return;
     }
+    
     if (currentPage === 1) {
       return;
     }
@@ -210,7 +231,8 @@ export const Main = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     setHasMoreResults(true);
     setHasPrevPage(currentPage > 2);
-
+    setIsLoading(true);
+    setIsSearchStarted(true);
     try {
       let users;
       if (maxRepositories) {
@@ -238,6 +260,8 @@ export const Main = () => {
 
       setUsers(users);
       setHasPrevPage(currentPage > 2);
+      setIsLoading(false);
+      setIsSearchStarted(false);
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
@@ -299,13 +323,18 @@ export const Main = () => {
         </div>
       )}
       <div className={styles.profiles}>
-      {users.length > 0 ? (
-  users.map((user) => (
-    <Profile key={user.id} user={user} editLink={`/product/${user.id}`} />
-  ))
-) : (
-  <div className={styles.users__none}>Для поиска аккаунтов GitHub введите логин пользователя</div>
-)}
+      {!isSearchStarted && users.length === 0 && (
+        <div className={styles.users__none}>Введите логин пользователя</div>
+      )}
+      {isSearchStarted && isLoading ? (
+        <MySkeleton />
+      ) : (
+        <div className={styles.profiles}>
+          {users.map((user) => (
+            <Profile key={user.id} user={user} editLink={`/product/${user.id}`} />
+          ))}
+        </div>
+      )}
       </div>
       {users.length > 0 && (
         <div className={styles.pagination}>
