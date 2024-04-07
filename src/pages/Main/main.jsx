@@ -14,7 +14,6 @@ import {
 } from "../../api";
 import { Modal } from "../../components/Modal/modal";
 import { Link } from "react-router-dom";
-import Skeleton from "../../components/Skeleton/skeleton";
 import MySkeleton from "../../components/Skeleton/skeleton";
 
 export const Main = () => {
@@ -291,7 +290,7 @@ export const Main = () => {
           </button>
         </div>
       </div>
-      {users.length > 0 && (
+      {/* {users.length > 0 && ( */}
         <div className={styles.filters}>
           <div className={styles.filters__block}>
             Сортировка по количеству репозиториев:
@@ -321,7 +320,7 @@ export const Main = () => {
             </button>
           </div>
         </div>
-      )}
+      {/* )} */}
       <div className={styles.profiles}>
       {!isSearchStarted && users.length === 0 && (
         <div className={styles.users__none}>Введите логин пользователя</div>

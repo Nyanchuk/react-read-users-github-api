@@ -2,10 +2,8 @@ import styles from "./modal.module.css";
 import { useEffect, useRef } from "react";
 
 export const Modal = ({ closeModal, errorText }) => {
-  // Для закрытия окна при клике вне окна
   const modalRef = useRef();
 
-  // Закрывает модальное окно при клике за его пределами
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
