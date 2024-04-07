@@ -3,16 +3,10 @@ export const fetchUsers = async (
   searchTerm,
   currentPage,
   itemsPerPage,
-  token
 ) => {
   try {
     const response = await fetch(
       `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
     );
     const data = await response.json();
     return data.items;
@@ -26,16 +20,10 @@ export const fetchUsersSortedAscending = async (
   searchTerm,
   currentPage,
   itemsPerPage,
-  token
 ) => {
   try {
     const response = await fetch(
       `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}&sort=repositories&order=asc`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
     );
     const data = await response.json();
     return data.items;
@@ -49,16 +37,10 @@ export const fetchUsersSortedDescending = async (
   searchTerm,
   currentPage,
   itemsPerPage,
-  token
 ) => {
   try {
     const response = await fetch(
       `https://api.github.com/search/users?q=${searchTerm}&per_page=${itemsPerPage}&page=${currentPage}&sort=repositories&order=desc`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
     );
     const data = await response.json();
     return data.items;
